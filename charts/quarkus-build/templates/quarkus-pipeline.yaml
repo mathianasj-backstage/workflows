@@ -1,8 +1,8 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: {{.Values.name}}-quarkus-pipeline
-  namespace: {{.Values.appName}}-build
+  name: {{ .Values.name }}-quarkus-pipeline
+  namespace: {{ .Values.appName }}-build
 spec:
   params:
     - default: .
@@ -49,7 +49,7 @@ spec:
         - checkout
       taskRef:
         kind: Task
-        name: {{.Values.name}}-s2i-java
+        name: {{ .Values.name }}-s2i-java
       when:
         - input: $(params.nativeBuild)
           operator: in
