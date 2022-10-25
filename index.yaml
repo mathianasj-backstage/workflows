@@ -3,6 +3,16 @@ entries:
   quarkus-build:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-10-25T18:05:18.342055105Z"
+    description: A Approved Helm chart for Quarkus Builds
+    digest: 99b5ae889d07d53db28ca3f1220f8b666ad43f912f298ad1c97ed9d9a63edd51
+    name: quarkus-build
+    type: application
+    urls:
+    - https://github.com/mathianasj-backstage/workflows/releases/download/quarkus-build-0.1.2/quarkus-build-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-10-25T17:46:16.989505726Z"
     description: A Approved Helm chart for Quarkus Builds
     digest: 5382174d28a917242764ef6c24b5facaa0fe6cf1a24a1d497a831d99e533bad0
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/mathianasj-backstage/workflows/releases/download/quarkus-build-0.1.1/quarkus-build-0.1.1.tgz
     version: 0.1.1
-generated: "2022-10-25T17:46:16.989519826Z"
+generated: "2022-10-25T18:05:18.342069805Z"
