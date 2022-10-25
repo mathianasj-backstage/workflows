@@ -5,7 +5,11 @@ on:
       app:
         description: 'the name of the app this repo belongs to'
         required: true
-        type: string  
+        type: string
+      component:
+        description: 'the name of the component this repo belongs to'
+        required: true
+        type: string
 
 jobs:
   java-build:
@@ -88,4 +92,4 @@ jobs:
     - name: start and follow the build
       shell: bash
       run: | 
-        tkn pipeline start --use-param-defaults -n ${{ inputs.app }}-build helloworld-quarkus-pipeline
+        tkn pipeline start --use-param-defaults -n ${{ inputs.app }}-build ${{ inputs.component }}-quarkus-pipeline
