@@ -47,7 +47,7 @@ spec:
         - name: SKIP_PUSH
           value: $(params.skipPush)
         - name: IMAGE
-          value: $(params.destImage):$(params:destTag)
+          value: $(params.destImage):$(params.destTag)
       runAfter:
         - checkout
       taskRef:
