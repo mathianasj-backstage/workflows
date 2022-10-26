@@ -1,0 +1,9 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}-quarkus
+spec:
+  template:
+    spec:
+      containers:
+        - image: image-registry.openshift-image-registry.svc:5000/{{ .Values.appName }}-build/{{ .Values.name }}-quarkus:{{ .Values.image.tag }}
