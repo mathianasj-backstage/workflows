@@ -96,6 +96,6 @@ jobs:
       shell: bash
       run: | 
         oc delete secret github-pat-secret -n ${{ inputs.app }}-build
-        oc create secret generic github-pat-secret -n ${{ inputs.app }}-build --type=kubernetes.io/basic-auth --from-literal=username="github-actions[bot]" --from-literal=password=$(cat /github/home/_github/token)
+        oc create secret generic github-pat-secret -n ${{ inputs.app }}-build --type=kubernetes.io/basic-auth --from-literal=username="github-actions[bot]" --from-literal=password=$GITHUB_TOKEN
         oc annotate -n ${{ inputs.app }}-build secret github-pat-secret "tekton.dev/git-0=https://github.com"
         tkn pipeline start --use-param-defaults -n ${{ inputs.app }}-build ${{ inputs.component }}-quarkus-pipeline -w name=source,claimName=${{ inputs.app }} --showlog
