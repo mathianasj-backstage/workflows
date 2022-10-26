@@ -35,7 +35,7 @@ spec:
           "github-actions[bot]"
         - >-
           git -C $GITHUB_WORKSPACE/gitops commit -m "image update - release dev
-          ${{ github.sha }}" -a
+          $(params.imageTag)" -a
         - >-
           git -C $GITHUB_WORKSPACE/gitops push $(params.gitopsurl) HEAD:master
           --follow-tags
