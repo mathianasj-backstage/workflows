@@ -48,7 +48,7 @@ jobs:
 
 # TODO change this into an s2i build
   image-build:
-    runs-on: [self-hosted, "${{ inputs.app }}"]
+    runs-on: [self-hosted]
     needs: java-build
     steps:
     - name: set repo name
