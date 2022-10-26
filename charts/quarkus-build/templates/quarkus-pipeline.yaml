@@ -15,8 +15,11 @@ spec:
       name: revision
       type: string
     - default: >-
-        image-registry.openshift-image-registry.svc:5000/{{.Values.appName}}-build/{{.Values.name}}-quarkus:latest
+        image-registry.openshift-image-registry.svc:5000/{{.Values.appName}}-build/{{.Values.name}}-quarkus
       name: destImage
+      type: string
+    - default: latest
+      name: destTag
       type: string
     - default: 'no'
       name: nativeBuild
@@ -44,7 +47,7 @@ spec:
         - name: SKIP_PUSH
           value: $(params.skipPush)
         - name: IMAGE
-          value: $(params.destImage)
+          value: $(params.destImage):$(params:destTag)
       runAfter:
         - checkout
       taskRef:
