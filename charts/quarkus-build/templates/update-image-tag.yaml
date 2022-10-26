@@ -13,11 +13,19 @@ spec:
       type: string
     - name: imageTag
       type: string
+    - default: /tekton/home
+      description: |
+        Absolute path to the user's home directory.
+      name: userHome
+      type: string
   steps:
-    - image: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8:v1.8'
+    - env:
+        - name: HOME
+          value: $(params.userHome)
+      image: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8:v1.8'
       name: push-to-git
       resources: {}
-      script: >
+      script: |
         #!/usr/bin/env sh
 
         set -eu
@@ -26,9 +34,14 @@ spec:
 
         sed '-i' 's/            tag: [a-zA-Z0-9]*/            tag:$(params.imageTag)/g' $(workspaces.source.path)/components/$(params.appName)-argocd-app-dev.yaml
 
+        cat $(workspaces.source.path)/components/$(params.appName)-argocd-app-dev.yaml
+
         git -C $(workspaces.source.path) config --local user.email "quarkus-ci+github-actions[bot]@users.noreply.github.com"
+        
         git -C $(workspaces.source.path) config --local user.name "github-actions[bot]"
+        
         git -C $(workspaces.source.path) commit -m "image update - release dev $(params.imageTag)" -a
+        
         git -C $(workspaces.source.path) push $(params.gitopsurl) HEAD:master --follow-tags
       workingDir: $(workspaces.source.path)
       
