@@ -1,0 +1,44 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: {{ .Values.name }}-update-deployment-tag
+  namespace: {{ .Values.appName }}-build
+spec:
+  params:
+    - name: appName
+      type: string
+    - name: PATH_CONTEXT
+      type: string
+    - name: gitopsurl
+      type: string
+    - name: imageTag
+      type: string
+  steps:
+    - command:
+        - sed
+        - '-i'
+        - 's/            tag: [a-zA-Z0-9]*/            tag: $(params.imageTag)/g'
+        - >-
+          $(params.PATH_CONTEXT)/gitops/components/$(params.appName)-argocd-app-dev.yaml
+      image: registry.redhat.io/ubi7/ubi-minimal
+      name: update-image-deployment-tag
+      resources: {}
+    - command:
+        - /bin/bash
+        - '-c'
+        - set -x
+        - >-
+          git -C $GITHUB_WORKSPACE/gitops config --local user.email
+          "quarkus-ci+github-actions[bot]@users.noreply.github.com"
+        - >-
+          git -C $GITHUB_WORKSPACE/gitops config --local user.name
+          "github-actions[bot]"
+        - >-
+          git -C $GITHUB_WORKSPACE/gitops commit -m "image update - release dev
+          ${{ github.sha }}" -a
+        - >-
+          git -C $GITHUB_WORKSPACE/gitops push $(params.gitopsurl) HEAD:master
+          --follow-tags
+      image: registry.redhat.io/ubi7/ubi-minimal
+      name: push-to-git
+      resources: {}

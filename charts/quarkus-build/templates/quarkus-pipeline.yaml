@@ -8,14 +8,17 @@ spec:
     - default: .
       name: PATH_CONTEXT
       type: string
-    - default: 'https://github.com/mathianasj-backstage/{{.Values.name}}-quarkus/'
+    - default: 'https://github.com/mathianasj-backstage/{{ .Values.name }}-quarkus/'
       name: url
+      type: string
+    - default: 'https://github.com/mathianasj-backstage/{{ .Values.appName }}-gitops'
+      name: gitopsurl
       type: string
     - default: master
       name: revision
       type: string
     - default: >-
-        image-registry.openshift-image-registry.svc:5000/{{.Values.appName}}-build/{{.Values.name}}-quarkus
+        image-registry.openshift-image-registry.svc:5000/{{ .Values.appName }}-build/{{ .Values.name }}-quarkus
       name: destImage
       type: string
     - default: latest
@@ -27,6 +30,9 @@ spec:
     - default: 'false'
       name: skipPush
       type: string
+    - name: appName
+      type: string
+      default: {{ .Values.appName }}
   tasks:
     - name: checkout
       params:
@@ -47,7 +53,7 @@ spec:
         - name: SKIP_PUSH
           value: $(params.skipPush)
         - name: IMAGE
-          value: $(params.destImage):$(params.destTag)
+          value: '$(params.destImage):$(params.destTag)'
       runAfter:
         - checkout
       taskRef:
@@ -61,5 +67,38 @@ spec:
       workspaces:
         - name: source
           workspace: source
+    - name: checkout-gitops
+      params:
+        - name: url
+          value: $(params.gitopsurl)
+        - name: revision
+          value: $(params.revision)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: gitops
+    - name: update-dev-deployment
+      params:
+        - name: PATH_CONTEXT
+          value: $(params.PATH_CONTEXT)
+        - name: gitopsurl
+          value: $(params.gitopsurl)
+        - name: appName
+          value: $(params.appName)
+        - name: imageTag
+          value: $(params.destTag)
+      runAfter:
+        - checkout-gitops
+        - build-service
+      taskRef:
+        kind: Task
+        name: {{ .Values.name }}-update-deployment-tag
+      workspaces:
+        - name: source
+          workspace: gitops
   workspaces:
     - name: source
+    - name: gitops
+
