@@ -14,34 +14,24 @@ spec:
     - name: imageTag
       type: string
   steps:
-    - command:
-        - sed
-        - '-i'
-        - 's/            tag: [a-zA-Z0-9]*/            tag: $(params.imageTag)/g'
-        - >-
-          $(params.PATH_CONTEXT)/components/$(params.appName)-argocd-app-dev.yaml
-      image: registry.redhat.io/ubi7/ubi-minimal
-      name: update-image-deployment-tag
-      resources: {}
-    - command:
-        - /bin/bash
-        - '-c'
-        - set -x
-        - >-
-          git -C $(params.PATH_CONTEXT) config --local user.email
-          "quarkus-ci+github-actions[bot]@users.noreply.github.com"
-        - >-
-          git -C $(params.PATH_CONTEXT) config --local user.name
-          "github-actions[bot]"
-        - >-
-          git -C $(params.PATH_CONTEXT) commit -m "image update - release dev
-          $(params.imageTag)" -a
-        - >-
-          git -C $(params.PATH_CONTEXT) push $(params.gitopsurl) HEAD:master
-          --follow-tags
-      image: registry.redhat.io/ubi7/ubi-minimal
+    - image: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8:v1.8'
       name: push-to-git
       resources: {}
+      script: >
+        #!/usr/bin/env sh
+
+        set -eu
+
+        ls $(workspaces.source.path)
+
+        sed '-i' 's/            tag: [a-zA-Z0-9]*/            tag:$(params.imageTag)/g' $(workspaces.source.path)/components/$(params.appName)-argocd-app-dev.yaml
+
+        git -C $(workspaces.source.path) config --local user.email "quarkus-ci+github-actions[bot]@users.noreply.github.com"
+        git -C $(workspaces.source.path) config --local user.name "github-actions[bot]"
+        git -C $(workspaces.source.path) commit -m "image update - release dev $(params.imageTag)" -a
+        git -C $(workspaces.source.path) push $(params.gitopsurl) HEAD:master --follow-tags
+      workingDir: $(workspaces.source.path)
+      
   workspaces:
     - mountPath: /workspace/source
       name: source
