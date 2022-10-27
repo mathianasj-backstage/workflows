@@ -124,6 +124,16 @@ entries:
   quarkus-run:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-10-27T13:54:44.099133955Z"
+    description: A Approved Helm chart for Quarkus Deployments
+    digest: 352a63b01612feffa7e096f8012813ae60ebee4633d9ff87f8b3ffc2f6103cd3
+    name: quarkus-run
+    type: application
+    urls:
+    - https://github.com/mathianasj-backstage/workflows/releases/download/quarkus-run-0.1.2/quarkus-run-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-10-27T12:22:23.396488741Z"
     description: A Approved Helm chart for Quarkus Deployments
     digest: fffb128f324bb0f13b54e5ae1865e32bf4df67867f18a75c7ab041a7b7332fef
@@ -142,4 +152,4 @@ entries:
     urls:
     - https://github.com/mathianasj-backstage/workflows/releases/download/quarkus-run-0.1.0/quarkus-run-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-27T12:22:23.39654704Z"
+generated: "2022-10-27T13:54:44.099336854Z"
