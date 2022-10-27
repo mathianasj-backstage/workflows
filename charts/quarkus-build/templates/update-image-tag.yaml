@@ -32,7 +32,7 @@ spec:
 
         ls $(workspaces.source.path)
 
-        sed '-i' 's/            tag: [a-zA-Z0-9]*/            tag:$(params.imageTag)/g' $(workspaces.source.path)/components/$(params.appName)-argocd-app-dev.yaml
+        sed '-i' 's/            tag: [a-zA-Z0-9]*/            tag: $(params.imageTag)/g' $(workspaces.source.path)/components/$(params.appName)-argocd-app-dev.yaml
 
         cat $(workspaces.source.path)/components/$(params.appName)-argocd-app-dev.yaml
 
