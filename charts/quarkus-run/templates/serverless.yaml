@@ -1,3 +1,4 @@
+{{ if .Values.serverless }}
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -9,3 +10,4 @@ spec:
     spec:
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/{{ .Values.appName }}-build/{{ .Values.name }}-quarkus:{{ .Values.image.tag }}
+{{ end }}

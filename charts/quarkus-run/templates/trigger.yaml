@@ -1,0 +1,16 @@
+{{ if .Values.eventing }}
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: {{ .Values.name }}-quarkus
+  namespace: {{ .Values.appName }}-{{ .Values.env }}
+spec:
+  broker: {{ .Values.knative.broker }}
+  filter: {}
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: {{ .Values.name }}-quarkus
+      namespace: {{ .Values.appName }}-{{ .Values.env }}
+{{ end }}
